@@ -1,10 +1,16 @@
 @ECHO OFF
 TITLE F txt Packager and Exporter
+SET CCD=%CD%
 python -m compileall .
+
 IF NOT EXIST "TMP\" MKDIR "TMP"
 IF NOT EXIST "TMP\Modules\" MKDIR "TMP\Modules"
 IF NOT EXIST "TMP\Modules\Interfaces\" MKDIR "TMP\Modules\Interfaces"
 IF NOT EXIST "TMP\Modules\Outputs\" MKDIR "TMP\Modules\Outputs"
+
+XCOPY "version.json" "TMP\" /c /y
+XCOPY "requirements.bat" "TMP\" /c /y
+XCOPY "requirements.txt" "TMP\" /c /y
 
 XCOPY "__pycache__\main.cpython-310.pyc" "TMP\" /c /y
 XCOPY "__pycache__\utils.cpython-310.pyc" "TMP\" /c /y
@@ -56,5 +62,22 @@ RENAME "TMP\Modules\Outputs\MicrosoftWord.cpython-310.pyc" "MicrosoftWord.pyc"
 RENAME "TMP\Modules\Outputs\OpenDocumentText.cpython-310.pyc" "OpenDocumentText.pyc"
 RENAME "TMP\Modules\Outputs\StrapDownJS.cpython-310.pyc" "StrapDownJS.pyc"
 RENAME "TMP\Modules\Outputs\TKinterApp.cpython-310.pyc" "TKinterApp.pyc"
+
+IF EXIST "TMP\run.bat" DEL "TMP\run.bat"
+
+XCOPY "run_export.bat" "TMP\"
+RENAME "TMP\run_export.bat" "run.bat"
+
+CD TMP
+IF EXIST "app.zip" DEL "app.zip"
+7z a app.zip run.bat
+7z a app.zip Modules
+7z a app.zip main.pyc
+7z a app.zip utils.pyc
+7z a app.zip console.pyc
+7z a app.zip version.json
+7z a app.zip requirements.bat
+7z a app.zip requirements.txt
+CD %CCD%
 
 TITLE 
