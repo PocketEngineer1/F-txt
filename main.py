@@ -1,4 +1,5 @@
 import configparser
+import platform
 import console
 import shutil
 import json
@@ -9,6 +10,9 @@ file=open("version.json")
 pkg=file.read()
 file.close()
 pkg=json.loads(pkg)
+
+if pkg['py_ver']!=platform.python_version():
+    console.warn('This program was compiled/written for python '+pkg['py_ver']+', and  may not work with your currently installed version of python')
 
 console.info('App Version: '+str(pkg['app_ver']['release'])+'.'+str(pkg['app_ver']['major'])+'.'+str(pkg['app_ver']['minor'])+'.'+str(pkg['app_ver']['patch']))
 

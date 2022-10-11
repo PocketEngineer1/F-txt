@@ -4,5 +4,6 @@
         "major":4,
         "minor":1,
         "patch":0
-    }
+    },
+    "py_ver":"3.10.7"
 }
