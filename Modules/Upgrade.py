@@ -10,4 +10,4 @@ version={
 }
 
 def __int__():
-    print
+    print("test")
