@@ -49,6 +49,7 @@ else:
 
 ModulesInstalled={
     'Configure':False,
+    'Upgrade':False,
     'Interfaces':{
         'GUI':False,
         'CLI':False,
@@ -66,6 +67,7 @@ ModulesInstalled={
 
 ModuleVersions={
     'Configure':None,
+    'Upgrade':None,
     'Interfaces':{
         'GUI':None,
         'CLI':None,
@@ -83,6 +85,7 @@ ModuleVersions={
 
 Modules={
     'Configure':'Modules/Configure.py',
+    'Upgrade':'Modules/Upgrade.py',
     'Interfaces':{
         'GUI':'Modules/Interfaces/GUI.py',
         'CLI':'Modules/Interfaces/CLI.py',
@@ -148,6 +151,11 @@ if os.path.exists(Modules['Configure']):
     ModulesInstalled['Configure']=True
     ModuleVersions['Configure']=Configure.version
 
+if os.path.exists(Modules['Upgrade']):
+    import Modules.Upgrade as Upgrade
+    ModulesInstalled['Upgrade']=True
+    ModuleVersions['Upgrade']=Upgrade.version
+
 args=sys.argv
 if len(args)==2:
     one=args[1]
@@ -161,7 +169,20 @@ if len(args)==2:
                     console.exit("The module 'Configure is not installed'")
         else:
             console.error("The module 'Configure' is disabled!")
-            console.exit("The module 'Configure' is disabled? Why is the module 'Configure' disabled?")
+            console.error("The module 'Configure' is disabled?")
+            console.exit("Why is the module 'Configure' disabled?")
+
+    elif one=='upgrade':
+        if ModulesEnabled['Modules']['Upgrade']=='Y':
+            if one=='Upgrade':
+                if ModulesInstalled['Upgrade']==True:
+                    Upgrade.__init__()
+                else:
+                    console.exit("The module 'Upgrade is not installed'")
+        else:
+            console.error("The module 'Upgrade' is disabled!")
+            console.error("The module 'Upgrade' is disabled?")
+            console.exit("Why is the module 'Upgrade' disabled?")
 
     elif defaults['FORMAT']['format']=='HTML':
         if ModulesEnabled['Modules/Outputs']['HTML']=='Y':
